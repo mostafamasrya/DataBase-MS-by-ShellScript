@@ -1,0 +1,254 @@
+#!/bin/bash
+#main menu
+#=================================================
+#insert
+
+#Insert(){
+
+
+#============================
+#craete table
+
+CreateTable(){
+	echo "please enter ur Table Name ? "
+
+        read tablename
+        while find ./ $tablename 2>/dev/null
+        do
+                echo "name is existed ,type new one "
+                echo "please enter ur table name ? "
+                read $tablename
+        done
+touch $tablename
+echo "$tablename created successfully "
+echo "enter the number of columns "
+read columnsNo
+counter=1
+chk=1
+while [ $counter -le $columnsNo ]
+do
+	
+	echo "enter name of column no.$counter"
+	read colName
+	echo "pls enter column type"
+
+	select choice in "string" "intger"
+	do
+		case $REPLY in
+			1)type="str" ;break ;;
+			2)type="int" ; break ;;
+			*)echo "invalid number ";;
+		esac
+	done
+	if [ $chk -eq 1 ]
+
+	then
+		echo "pls ,is column primary key"
+
+		select choice in "primary key" "not a primary key"
+		do
+			case $REPLY in
+			1)pkey="yes";((chk=$chk+1)); break;exit;;
+			2)pkey="no";break;exit;;
+			*)echo "invalid number";;
+	        	esac
+        	done
+	fi
+
+        if [ $pkey = "no" ]
+	then
+		echo "$colName($type) | " >>$tablename
+
+	 else
+		 echo "$colName($type)P | " >>$tablename
+		 pkey="no"
+	 fi
+
+
+	((counter=$counter+1))
+done
+
+       
+}
+
+
+#=====================================================
+ListTables(){
+	ls -l
+}
+
+#=======================================================
+DropTable(){
+        echo "enter your table name"
+        read tablename1
+        while [ ! -f  $tablename1 ]
+        do
+                echo "this table is not exist"
+                echo "please enter your table name"
+                read tablename1
+        done
+rm  $tablename1
+echo "$tablename1 deleted successfully"
+}
+#=====================================================
+
+Insert(){
+echo "enter your table name"
+read tabName
+while [ ! -f  $tabName ]
+do
+                echo "this table is not exist"
+		ls
+                echo "please enter your table name"
+                read tabName
+done
+echo "how many records"
+read rows
+awk '{print $0}' $tabName
+count1=1
+recordsNo=`awk 'END{print NR}' $tabName`
+
+colsNo=`awk 'BEGIN{FS="|"}{print NF-1}' $tabName `
+echo "you have $colsNo coulmns"
+while [ $count1 -le $rows ]
+do
+	echo "please insert "
+	awk 'BEGIN{FS="|"}{if (NR == 1) for(i=1;i<NF;i++) print $i}' $tabName
+	i=1
+	while [ $i -le $colsNo ]
+	do
+		echo "insert value no.$i "
+		read value
+
+		#validate
+
+
+
+
+
+
+
+
+
+
+		((i=$i+1))
+
+	done
+
+	
+
+
+
+
+
+      #	awk -F"|" '{print $1}' $tabName
+	
+#	read value
+#	if [ $count1 -eq $rows ]
+#	then
+#		echo -n "$value  | " >>$tableName
+#	else
+#		echo " $value   | " >>$tableName
+#	fi
+
+	((count1=$count1+1))
+done
+
+	
+
+}
+
+#======================================================
+ConnectMenu(){
+	select choice in "Create Table" "List Tables" "Drop Table" "Insert Into Table" "Select from Table" "Delete FRom Table" "Update Table"
+do
+        case $REPLY in
+                1)CreateTable ;  break;;
+                2)ListTables ; break  ;;
+                3)DropTable ; break ;;
+                4)Insert; break ;;
+		5)selectfrom; break ;;
+		6)delete; break ;;
+		7)update ; break ;;
+
+        esac
+done
+
+}
+
+PS3="please select a chioce number ? "
+CreateDB(){
+	echo "please enter ur DB_name ? "
+
+	read name 
+	while find ./ $name 2>/dev/null 
+	do
+		echo "name is existed ,type new one "
+		echo "please enter ur DB_name ? " 
+		read name
+	done
+mkdir $name 
+}
+
+#list func
+
+ListDB(){
+	ls -l | find ./ -type d
+}	
+
+#connect to DB func
+ConnectDB(){
+	ls
+	echo "enter your DB name"
+        read dbname
+	while [ ! -d  $dbname ]
+        do
+		echo "this DB is not exist"
+	        echo "please enter your DB name"
+                read dbname	       
+	done
+echo $dbname	
+#cd $dbname/
+#source script1.sh
+
+cd /home/mostafamasrya/shlproject/$dbname/ 
+ConnectMenu
+
+}
+
+#Drop DB
+
+DropDB(){
+	echo "enter your DB name"
+        read dbname1
+        while [ ! -d  $dbname1 ]
+        do
+                echo "this DB is not exist"
+                echo "please enter your DB name"
+                read dbname1
+        done
+rm -ir $dbname1
+echo "$dbname1 deleted successfully"
+}
+
+
+
+
+select choice in "Create DtaBase" "List DataBase" "Connect To DataBase" "Drop DataBase"
+do
+	case $REPLY in
+		1)CreateDB ;  break;;
+		2)ListDB  ; break  ;;
+		3)ConnectDB ; break ;;
+		4)DropDB ; break ;;
+	esac
+done
+
+
+
+
+
+
+
+
+

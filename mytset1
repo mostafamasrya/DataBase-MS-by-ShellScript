@@ -1,0 +1,9 @@
+#!/bin/bash
+x="mostafa"
+if [ $x -ne '' ]
+then
+	echo "yes"
+else
+	echo "no"
+fi
+

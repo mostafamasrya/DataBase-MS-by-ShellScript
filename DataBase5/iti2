@@ -1,0 +1,6 @@
+id:int:p  | name:str:n | city:str:n |
+ 2     | ahmed    | cairo  |
+ 3     | ramy     | alex   |
+ 4     | samy    | aswan  |
+ 1     | maged   | alex   |
+ 5     |salma    | luxor   |
